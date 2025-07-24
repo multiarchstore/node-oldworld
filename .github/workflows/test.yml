@@ -6,11 +6,7 @@ on:
       version:
         description: 'Node.js version'
         required: true
-        default: 'v24.3.0'
-      cross_tools:
-        description: 'Cross tools'
-        required: true
-        default: 'https://github.com/loong64/cross-tools/releases/download/20250507'
+        default: 'v24.4.1'
 
 jobs:
   test-build:
@@ -32,7 +28,7 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          repository: loong64/unofficial-builds
+          repository: loong64/node-unofficial-builds
           path: unofficial-builds
 
       - uses: docker/setup-qemu-action@v3
@@ -48,14 +44,12 @@ jobs:
         run: |
           case ${{ matrix.binaries }} in
             glibc)
-              sed -i 's@https://github.com/loong64/cross-tools/releases/download/20250507/x86_64-cross-tools-loongarch64-unknown-linux-gnu-stable.tar.xz@${{ github.event.inputs.cross_tools }}/x86_64-linux-gnu-cross-tools-loongarch64-unknown-linux-gnu-stable.tar.xz@g' recipes/loong64/Dockerfile
               ./bin/local_build.sh -r loong64 -v ${{ env.version }} -w ${{ github.workspace }}/workdir
               cd ${{ github.workspace }}/workdir/staging/release/${{ env.version }}
               sha256sum node-${{ env.version }}-linux-loong64.tar.gz > node-${{ env.version }}-linux-loong64.tar.gz.sha256
               sha256sum node-${{ env.version }}-linux-loong64.tar.xz > node-${{ env.version }}-linux-loong64.tar.xz.sha256
               ;;
             musl)
-              sed -i 's@https://github.com/loong64/cross-tools/releases/download/20250507/x86_64-cross-tools-loongarch64-unknown-linux-musl-stable.tar.xz@${{ github.event.inputs.cross_tools }}/x86_64-linux-gnu-cross-tools-loongarch64-unknown-linux-musl-stable.tar.xz@g' recipes/musl/Dockerfile
               ./bin/local_build.sh -r musl -v ${{ env.version }} -w ${{ github.workspace }}/workdir
               cd ${{ github.workspace }}/workdir/staging/release/${{ env.version }}
               sha256sum node-${{ env.version }}-linux-loong64-musl.tar.gz > node-${{ env.version }}-linux-loong64-musl.tar.gz.sha256
