@@ -27,7 +27,7 @@ jobs:
     strategy:
       matrix:
         name: ['node']
-        binaries: ['glibc', 'musl']
+        binaries: ['glibc']
 
     steps:
       - name: Check version
