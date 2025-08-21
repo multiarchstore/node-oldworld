@@ -67,7 +67,7 @@ jobs:
       - uses: actions/checkout@v4
         if: env.create == '1'
         with:
-          repository: loong64/node-unofficial-builds
+          repository: multiarchstore/node-unofficial-builds-oldworld
           path: unofficial-builds
 
       - uses: docker/setup-qemu-action@v3
